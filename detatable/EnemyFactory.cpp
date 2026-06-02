@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "EnemyFactory.h"
+#include <memory>
 
 const EnemyData EnemyFactory::EnemyTable[] = {
 	{ 1, "Slime", 10, 5, 2, 1, 5, 10,0, Element::Water },
@@ -10,13 +11,13 @@ const EnemyData EnemyFactory::EnemyTable[] = {
 
 const int EnemyFactory::EnemyTableSize = sizeof(EnemyTable) / sizeof(EnemyData);
 
-Enemy* EnemyFactory::CreateEnemy(int ID)
+std::unique_ptr<Enemy> EnemyFactory::CreateEnemy(int ID)
 {
 	for (int i = 0; i < EnemyTableSize; ++i)
 	{
 		if (EnemyTable[i].ID == ID)
 		{
-			return new Enemy(EnemyTable[i]);
+			return std::make_unique<Enemy>(EnemyTable[i]);
 		}
 	}
 	return nullptr;

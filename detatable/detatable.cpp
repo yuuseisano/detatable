@@ -1,7 +1,8 @@
 ﻿#include <iostream>
 #include <iomanip>
 #include <random>
-#include <string>
+#include <memory>
+#include "Enemy.h"
 #include "EnemyFactory.h"
 #include "EnemyData.h"
 
@@ -22,7 +23,6 @@ static const char* ElementToString(Element e)
 
 int main()
 {
-	// テーブル全体から合計を計算（インスタンス生成なし）
 	int tableSize = EnemyFactory::GetEnemyTableSize();
 	if (tableSize <= 0)
 	{
@@ -42,38 +42,45 @@ int main()
 		}
 	}
 
-	// ランダムで1体選択（ここでもインスタンスは生成しない）
+	// ランダムで 1 体の ID を選び、unique_ptr で生成して表示
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> dist(0, tableSize - 1);
 	int chosenIndex = dist(gen);
 
-	const EnemyData* chosen = EnemyFactory::GetEnemyDataByIndex(chosenIndex);
-	if (!chosen)
+	const EnemyData* chosenData = EnemyFactory::GetEnemyDataByIndex(chosenIndex);
+	if (!chosenData)
 	{
 		std::cout << "敵の選択に失敗しました。" << std::endl;
 		return 0;
 	}
 
-	// 選択された敵の全ステータスを表示
-	std::cout << "=== ランダム選択された敵 ===" << std::endl;
-	std::cout << "ID: " << chosen->ID << std::endl;
-	std::cout << "Name: " << chosen->Name << std::endl;
-	std::cout << "HP: " << chosen->HP << std::endl;
-	std::cout << "ATK: " << chosen->ATK << std::endl;
-	std::cout << "DEF: " << chosen->DEF << std::endl;
-	std::cout << "SPD: " << chosen->SPD << std::endl;
-	std::cout << "Gold: " << chosen->Gold << std::endl;
-	std::cout << "EXP: " << chosen->EXP << std::endl;
-	std::cout << "CriticalRate: " << chosen->CriticalRate << std::endl;
-	std::cout << "Element: " << ElementToString(chosen->Element) << std::endl;
+	// CreateEnemy は std::unique_ptr<Enemy> を返す想定
+	std::unique_ptr<Enemy> chosenEnemy = EnemyFactory::CreateEnemy(chosenData->ID);
+	if (!chosenEnemy)
+	{
+		std::cout << "敵インスタンスの生成に失敗しました。" << std::endl;
+		return 0;
+	}
 
-	// 合計 HP と 平均 ATK を表示
+	std::cout << "=== ランダム選択された敵 ===" << std::endl;
+	std::cout << "ID: " << chosenEnemy->Data.ID << std::endl;
+	std::cout << "Name: " << chosenEnemy->Data.Name << std::endl;
+	std::cout << "HP: " << chosenEnemy->Data.HP << std::endl;
+	std::cout << "ATK: " << chosenEnemy->Data.ATK << std::endl;
+	std::cout << "DEF: " << chosenEnemy->Data.DEF << std::endl;
+	std::cout << "SPD: " << chosenEnemy->Data.SPD << std::endl;
+	std::cout << "Gold: " << chosenEnemy->Data.Gold << std::endl;
+	std::cout << "EXP: " << chosenEnemy->Data.EXP << std::endl;
+	std::cout << "CriticalRate: " << chosenEnemy->Data.CriticalRate << std::endl;
+	std::cout << "Element: " << ElementToString(chosenEnemy->Data.Element) << std::endl;
+
 	double averageATK = static_cast<double>(totalATK) / static_cast<double>(tableSize);
 	std::cout << std::endl;
 	std::cout << "合計 HP: " << totalHP << std::endl;
 	std::cout << "平均 ATK: " << std::fixed << std::setprecision(2) << averageATK << std::endl;
 
+	// unique_ptr により自動で解放される
 	return 0;
 }
 
