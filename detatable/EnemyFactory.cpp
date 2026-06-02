@@ -21,3 +21,15 @@ Enemy* EnemyFactory::CreateEnemy(int ID)
 	}
 	return nullptr;
 }
+
+// 追加実装: テーブル情報の読み取り用関数（インスタンスは生成しない）
+int EnemyFactory::GetEnemyTableSize()
+{
+	return EnemyTableSize;
+}
+
+const EnemyData* EnemyFactory::GetEnemyDataByIndex(int index)
+{
+	if (index < 0 || index >= EnemyTableSize) return nullptr;
+	return &EnemyTable[index];
+}

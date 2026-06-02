@@ -1,5 +1,5 @@
 #pragma once
-#include"EnemyData.h"
+#include "EnemyData.h"
 
 class Enemy;
 
@@ -19,4 +19,8 @@ public:
 	// このメソッドは、指定されたIDに基づいて敵を生成します。
 	// IDがつからなかった場合はnullptrを返します。
 	static Enemy* CreateEnemy(int ID);
+
+	// 追加: テーブルへの読み取り専用アクセス（インスタンス生成なしでデータを参照するため）
+	static int GetEnemyTableSize();
+	static const EnemyData* GetEnemyDataByIndex(int index);
 };
