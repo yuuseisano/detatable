@@ -1,4 +1,6 @@
 ﻿#include <iostream>
+#include "Enemy.h"
+#include "EnemyFactory.h"
 
 int main()
 {
