@@ -125,6 +125,12 @@
   <ItemGroup>
     <ClCompile Include="detatable.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Element.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyData.h" />
+    <ClInclude Include="EnemyFactory.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
