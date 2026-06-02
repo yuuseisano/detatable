@@ -2,7 +2,7 @@
 #include "Element.h"
 
 // @brief 敵のデータを表す構造体
-
+// @details
 
 struct EnemyData
 {
