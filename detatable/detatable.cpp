@@ -4,6 +4,15 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
+		Enemy* enemy = EnemyFactory::CreateEnemy(1);
+
+		std::cout << enemy->Data.Name << "   EXP :" << enemy->Data.EXP << std::endl;
+
+		delete enemy;
+
+
+		return 0;
+
+	
 }
 
